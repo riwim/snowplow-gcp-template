@@ -16,7 +16,7 @@ mkdir -p ./configs
 cd ./templates/
 TEMP_BUCKET_ESC=$(echo $TEMP_BUCKET |  sed -e 's/[\/&]/\\&/g')
 
-echo "[info] Preparinng scripts from templates"
+echo "[info] Preparing scripts from templates"
 for file in `ls ./*.*`
 do
     echo "Procesing template ${file}"
@@ -26,7 +26,7 @@ do
 done
 cd ..
 
-echo "[info] Cresting PUB/SUB topics and subscriptions"
+echo "[info] Creating PUB/SUB topics and subscriptions"
 #collector pubsub
 gcloud alpha pubsub topics create "collected-good" --message-storage-policy-allowed-regions="$REGION"
 gcloud alpha pubsub topics create "collected-bad" --message-storage-policy-allowed-regions="$REGION"
@@ -55,7 +55,7 @@ gcloud pubsub subscriptions create "bq-failed-inserts" --topic="bq-failed-insert
 gcloud pubsub subscriptions create "collected-good-sub-test" --topic="collected-good" --expiration-period=365d
 gcloud pubsub subscriptions create "enriched-good-sub-test" --topic="enriched-good" --expiration-period=365d
 
-echo "[info] Creating temp bucket $TEMP_BUCKET for confugurations"
+echo "[info] Creating temp bucket $TEMP_BUCKET for configurations"
 #prepare temp buckets for configurations
 gsutil mb -l EU "$TEMP_BUCKET"
 touch zero.txt
@@ -73,7 +73,7 @@ echo "[info] Preparing bigquery dataset $GCP_NAME:snowplow"
 bq --location=EU mk "$GCP_NAME:snowplow"
 
 
-###################################### Colector group + loadbalancer ###################################################
+###################################### Collector group + loadbalancer ###################################################
 # collector instances template
 echo "[info] Preparing compute instance group machine template"
 gcloud compute instance-templates create snowplow-collector-template \
@@ -108,7 +108,7 @@ echo "[info] All done. Collector runs at $collector_ip. Wait until scala-stream-
 echo "[test] curl http://$collector_ip:8080/health"
 echo "[test] curl http://$collector_ip:8080/i"
 echo "[test] and then:"
-echo "[test] gcloud pubsub subscriptions pull --auto-ack good-sub-test"
+echo "[test] gcloud pubsub subscriptions pull --auto-ack collected-good-sub-test"
 
 ####################################################################################################
 # MANUAL ACTIONS
