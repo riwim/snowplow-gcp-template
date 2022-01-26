@@ -12,7 +12,7 @@ gcloud config set project $GCP_NAME
 
 #prepare config files from template
 
-mkdir ./configs
+mkdir -p ./configs
 cd ./templates/
 TEMP_BUCKET_ESC=$(echo $TEMP_BUCKET |  sed -e 's/[\/&]/\\&/g')
 
