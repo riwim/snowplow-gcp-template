@@ -97,10 +97,10 @@ echo "[info] Preparing health check"
 gcloud compute health-checks create http "snowplow-collector-health-check" --timeout "5" --check-interval "10" --unhealthy-threshold "3" --healthy-threshold "2" --port "8080" --request-path "/health"
 
 echo "[info] Preparing compute instance group"
-gcloud compute instance-groups managed create snowplow-collector-group --base-instance-name=snowplow-collector-group --template=snowplow-collector-template --size=1  --health-check=snowplow-collector-health-check --initial-delay=300
+gcloud compute instance-groups managed create snowplow-collector-group --base-instance-name=snowplow-collector-group --template=snowplow-collector-template --size=1  --health-check=snowplow-collector-health-check --initial-delay=300 --zone="${ZONE}"
 
 echo "[info] Seting autoscaling for group"
-gcloud compute instance-groups managed set-autoscaling "snowplow-collector-group" --cool-down-period "60" --max-num-replicas "2" --min-num-replicas "1" --target-cpu-utilization "0.6"
+gcloud compute instance-groups managed set-autoscaling "snowplow-collector-group" --cool-down-period "60" --max-num-replicas "2" --min-num-replicas "1" --target-cpu-utilization "0.6" --zone="${ZONE}"
 
 gcloud compute instances list
 collector_ip=$(gcloud compute instances list --filter="name~collector" --format=json | jq -r '.[0].networkInterfaces[0].accessConfigs[0].natIP')
