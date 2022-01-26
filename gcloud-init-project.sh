@@ -28,24 +28,24 @@ cd ..
 
 echo "[info] Creating PUB/SUB topics and subscriptions"
 #collector pubsub
-gcloud alpha pubsub topics create "collected-good" --message-storage-policy-allowed-regions="$REGION"
-gcloud alpha pubsub topics create "collected-bad" --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create "collected-good" --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create "collected-bad" --message-storage-policy-allowed-regions="$REGION"
 gcloud pubsub subscriptions create "collected-good-sub" --topic="collected-good" --expiration-period=365d
 gcloud pubsub subscriptions create "collected-bad-sub" --topic="collected-bad" --expiration-period=365d
 
 #enriched pubsub
-gcloud alpha pubsub topics create enriched-bad --message-storage-policy-allowed-regions="$REGION"
-gcloud alpha pubsub topics create enriched-good --message-storage-policy-allowed-regions="$REGION"
-gcloud alpha pubsub topics create enriched-pii --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create enriched-bad --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create enriched-good --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create enriched-pii --message-storage-policy-allowed-regions="$REGION"
 
 gcloud pubsub subscriptions create "enriched-good-sub" --topic="enriched-good" --expiration-period=365d
 gcloud pubsub subscriptions create "enriched-bad-sub" --topic="enriched-bad" --expiration-period=365d
 gcloud pubsub subscriptions create "enriched-pii-sub" --topic="enriched-pii" --expiration-period=365d
 
 #bigquery
-gcloud alpha pubsub topics create bq-bad-rows --message-storage-policy-allowed-regions="$REGION"
-gcloud alpha pubsub topics create bq-failed-inserts --message-storage-policy-allowed-regions="$REGION"
-gcloud alpha pubsub topics create bq-types --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create bq-bad-rows --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create bq-failed-inserts --message-storage-policy-allowed-regions="$REGION"
+gcloud pubsub topics create bq-types --message-storage-policy-allowed-regions="$REGION"
 
 gcloud pubsub subscriptions create "bq-types-sub" --topic="bq-types" --expiration-period=365d
 gcloud pubsub subscriptions create "bq-bad-rows-sub" --topic="bq-bad-rows" --expiration-period=365d
@@ -97,7 +97,7 @@ echo "[info] Preparing health check"
 gcloud compute health-checks create http "snowplow-collector-health-check" --timeout "5" --check-interval "10" --unhealthy-threshold "3" --healthy-threshold "2" --port "8080" --request-path "/health"
 
 echo "[info] Preparing compute instance group"
-gcloud beta compute instance-groups managed create snowplow-collector-group --base-instance-name=snowplow-collector-group --template=snowplow-collector-template --size=1  --health-check=snowplow-collector-health-check --initial-delay=300
+gcloud compute instance-groups managed create snowplow-collector-group --base-instance-name=snowplow-collector-group --template=snowplow-collector-template --size=1  --health-check=snowplow-collector-health-check --initial-delay=300
 
 echo "[info] Seting autoscaling for group"
 gcloud compute instance-groups managed set-autoscaling "snowplow-collector-group" --cool-down-period "60" --max-num-replicas "2" --min-num-replicas "1" --target-cpu-utilization "0.6"
