@@ -103,7 +103,8 @@ echo "[info] Seting autoscaling for group"
 gcloud compute instance-groups managed set-autoscaling "snowplow-collector-group" --cool-down-period "60" --max-num-replicas "2" --min-num-replicas "1" --target-cpu-utilization "0.6" --zone="${ZONE}"
 
 gcloud compute instances list
-collector_ip=$(gcloud compute instances list --filter="name~collector" --format=json | jq -r '.[0].networkInterfaces[0].accessConfigs[0].natIP')
+collector_ip=$(gcloud compute instances list --filter="name ~ collector"\
+      --format="get(networkInterfaces[0].accessConfigs[0].natIP)")
 echo "[info] All done. Collector runs at $collector_ip. Wait until scala-stream-collector starts (cca. 2-5mins)"
 echo "[test] curl http://$collector_ip:8080/health"
 echo "[test] curl http://$collector_ip:8080/i"
