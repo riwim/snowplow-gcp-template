@@ -9,7 +9,7 @@ sudo apt-get update
 sudo apt-get -y install default-jre unzip less wget
 
 wget -q https://github.com/snowplow/enrich/releases/download/beam_enrich%2F1.1.1/snowplow_beam_enrich_1.1.0.zip
-wget -q https://github.com/snowplow/enrich/releases/download/beam_enrich%2F$enrich_version/snowplow_beam_enrich_$enrich_version.zip
+# wget -q https://github.com/snowplow/enrich/releases/download/beam_enrich%2F$enrich_version/snowplow_beam_enrich_$enrich_version.zip
 unzip snowplow_beam_enrich_$enrich_version.zip
 
 wget -q https://github.com/snowplow-incubator/snowplow-bigquery-loader/releases/download/$bq_version/snowplow_bigquery_loader_$bq_version.zip
